@@ -1,0 +1,39 @@
+name: TxCrates
+main: me.txs.txcrates.TxCrates
+version: 1.0
+authors: [Jereds]
+api-version: 1.16
+soft-depend: [Vault]
+depend: [TxContainerAPI]
+commands:
+  crates:
+    usage: /crates
+    description: Opens the base menu for crates.
+    aliases: [txcrates]
+  crate:
+    usage: /crate <crate id>
+    description: Gives you the specified crate.
+    aliases: [txcrate]
+  cratekey:
+    usage: /cratekey <player> <crate id> [amount]
+    description: Gives the specified player the specified crate key for that crate.
+    aliases: [key, txkey]
+  cratekeyall:
+    usage: /cratekeyall <crate id> [amount]
+    description: Gives all online players the specified crate key for that crate.
+    aliases: [keyall, txkeyall]
+  testhex:
+    usage: /testhex <string> <from> <to>
+    description: just do it
+    aliases: [th]
+permissions:
+  TxCrates.admin.crates:
+    description: Access to /crates
+  TxCrates.admin.crate:
+    description: Access to /crate <crate id>
+  TxCrates.admin.key:
+    description: Access to /crate key <player> <crate> [amount]
+  TxCrates.admin.edit:
+    description: Access to edit crate prizes.
+  TxCrates.break:
+    description: Access to break crates.
