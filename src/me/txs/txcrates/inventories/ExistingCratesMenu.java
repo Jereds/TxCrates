@@ -49,7 +49,7 @@ public class ExistingCratesMenu extends Menu {
 		if(!meta.hasDisplayName())
 			return;
 		
-		Container container = ContainerUtil.getByDisplay(meta.getDisplayName()).get();
+		Container container = ContainerUtil.getByDisplay(meta.displayName().toString()).get();
 		
 		switch(event.getClick()) {
 		case LEFT:

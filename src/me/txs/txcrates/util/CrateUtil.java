@@ -14,6 +14,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import me.jereds.txcontainerapi.api.ContainerUtil;
 import me.jereds.txcontainerapi.api.objects.Container;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatColor;
 
 public class CrateUtil {
@@ -48,8 +49,8 @@ public class CrateUtil {
 	public static ItemStack asItem(Material mat, Container container) {
 		ItemStack item = new ItemStack(mat);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(container.getDisplay());
-		meta.setLore(Arrays.asList(ChatColor.YELLOW + "Place this to create a crate."));
+		meta.displayName(Component.text(container.getDisplay()));
+		meta.lore(Arrays.asList(Component.text(ChatColor.YELLOW + "Place this to create a crate.")));
 		meta.getPersistentDataContainer().set(NamespacedUtil.getCrateItemTypeKey(), PersistentDataType.STRING, container.getId());
 		item.setItemMeta(meta);
 		return item;
@@ -58,9 +59,9 @@ public class CrateUtil {
 	public static ItemStack getCrateKey(Container container) {
 		ItemStack item = new ItemStack(Material.TRIPWIRE_HOOK);
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(container.getDisplay() + ChatColor.WHITE + " Key");
-		meta.setLore(Arrays.asList(ChatColor.GREEN + "Right click on a " + container.getDisplay(),
-				ChatColor.GREEN + "to get a random prize!"));
+		meta.displayName(Component.text(container.getDisplay() + ChatColor.WHITE + " Key"));
+		meta.lore(Arrays.asList(Component.text(ChatColor.GREEN + "Right click on a " + container.getDisplay()),
+				Component.text(ChatColor.GREEN + "to get a random prize!")));
 		meta.getPersistentDataContainer().set(NamespacedUtil.getCrateItemTypeKey(), PersistentDataType.STRING, container.getId());
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		item.setItemMeta(meta);

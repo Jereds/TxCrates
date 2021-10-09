@@ -60,7 +60,7 @@ public class CrateKeyAllCommand implements CommandExecutor {
 			item.setAmount(amount);
 			for(Player player : Bukkit.getOnlinePlayers()) {
 				InventoryUtil.addItem(player, item);
-				sender.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "Successfully gave " + player.getDisplayName()
+				sender.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "Successfully gave " + player.displayName()
 						+ ChatColor.GREEN + " " + amount + " key" + (amount > 1 ? "s" : "") + ".");
 				player.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "Successfully recieved" + 
 						ChatColor.GREEN + " " + amount + " " + crate.getDisplay() + ChatColor.GREEN + " key" + (amount > 1 ? "s" : "") + ".");

@@ -66,7 +66,7 @@ public class KeyCommand implements CommandExecutor {
 			ItemStack item = CrateUtil.getCrateKey(crate);
 			item.setAmount(amount);
 			InventoryUtil.addItem(target, item);
-			sender.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "Successfully gave " + target.getDisplayName()
+			sender.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "Successfully gave " + target.displayName()
 					+ ChatColor.GREEN + " " + amount + " key" + (amount > 1 ? "s" : "") + ".");
 			target.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "Successfully recieved" + 
 					ChatColor.GREEN + " " + amount + " " + crate.getDisplay() + ChatColor.GREEN + " key" + (amount > 1 ? "s" : "") + ".");
