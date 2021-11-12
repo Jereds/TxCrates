@@ -22,13 +22,19 @@ public class InventoryListener implements Listener {
 
 		Menu txHolder = (Menu)holder;
 		
-		if (event.getClick() != ClickType.LEFT && event.getClick() != ClickType.RIGHT && event.getClick() != ClickType.MIDDLE && !event.isShiftClick()) {
+		if (event.getClick() != ClickType.LEFT && event.getClick() != ClickType.RIGHT && event.getClick() 
+				!= ClickType.MIDDLE && !event.isShiftClick()) {
 			event.setCancelled(true);
 			return;
 		}
 
 		if (event.getCurrentItem() == null || event.getCurrentItem().getType() == Material.AIR)
 			return;
+		
+		if(event.getView().getBottomInventory().equals(event.getClickedInventory()) && 
+				!event.getWhoClicked().hasPermission("txcrates.admin.edit")) {
+			event.setCancelled(true);
+		}
 		
 		if (event.getView().getTopInventory().equals(event.getClickedInventory()))
 			txHolder.onClick(event);

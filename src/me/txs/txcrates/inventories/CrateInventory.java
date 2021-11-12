@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
-import me.jereds.txcontainerapi.api.objects.Container;
+import me.jereds.containerapi.objects.Container;
 
 public class CrateInventory extends Menu {
 
@@ -18,6 +18,7 @@ public class CrateInventory extends Menu {
 		IntStream.range(0, getInventory().getSize()).forEach(slot -> {
 			getInventory().setItem(slot, crate.getItems(true).get(slot));
 		});
+		
 		open();
 	}
 

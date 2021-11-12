@@ -9,6 +9,9 @@
 	<classpathentry kind="lib" path="C:/Jars/Vault.jar"/>
 	<classpathentry kind="lib" path="C:/Jars/PluginPrefix.jar"/>
 	<classpathentry kind="lib" path="C:/Jars/patched_1.17.1.jar"/>
-	<classpathentry kind="lib" path="C:/Jars/TxContainerAPI.jar"/>
+	<classpathentry kind="lib" path="C:/Jars/worldedit-bukkit-7.2.0-beta-04.jar"/>
+	<classpathentry kind="lib" path="C:/Jars/WorldGuard.jar"/>
+	<classpathentry kind="lib" path="C:/Jars/worldguard-bukkit-7.0.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/lolsw/Desktop/Server Work/ContainerAPI.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,20 +1,24 @@
 package me.txs.txcrates.commands;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
+import me.jereds.containerapi.objects.Container;
+import me.jereds.containerapi.util.ContainerUtil;
 import me.txs.txcrates.util.CrateUtil;
 import me.txs.txcrates.util.InventoryUtil;
 import me.txs.txcrates.util.StringUtil;
 import net.md_5.bungee.api.ChatColor;
 
-public class KeyCommand implements CommandExecutor {
+public class KeyCommand implements CommandExecutor, TabCompleter {
 
 	private int amount = 1;
 
@@ -63,15 +67,22 @@ public class KeyCommand implements CommandExecutor {
 		}
 
 		CrateUtil.fromId(id).ifPresentOrElse(crate -> {
-			ItemStack item = CrateUtil.getCrateKey(crate);
-			item.setAmount(amount);
-			InventoryUtil.addItem(target, item);
-			sender.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "Successfully gave " + target.displayName()
+			sender.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "Successfully gave " + target.getDisplayName()
 					+ ChatColor.GREEN + " " + amount + " key" + (amount > 1 ? "s" : "") + ".");
 			target.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "Successfully recieved" + 
 					ChatColor.GREEN + " " + amount + " " + crate.getDisplay() + ChatColor.GREEN + " key" + (amount > 1 ? "s" : "") + ".");
+			InventoryUtil.addCrateKey(target, crate, amount);
 		}, () -> sender.sendMessage(StringUtil.getPrefix() + ChatColor.RED + "Sorry! I couldn't find that crate."));
 		amount = 1;
 		return true;
+	}
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
+		if(args.length == 2)
+			return ContainerUtil.getAllContainers().stream().map(Container::getId)
+					.filter(str -> str.toLowerCase().startsWith(args[1].toLowerCase()) || str.trim().isEmpty())
+					.collect(Collectors.toList());
+		return null;
 	}
 }

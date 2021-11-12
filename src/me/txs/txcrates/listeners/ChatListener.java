@@ -1,15 +1,25 @@
 package me.txs.txcrates.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.persistence.PersistentDataType;
 
-import me.jereds.txcontainerapi.api.ContainerUtil;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.util.Location;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+
+import me.jereds.containerapi.util.ContainerUtil;
 import me.txs.txcrates.TxCrates;
+import me.txs.txcrates.events.CrateRedeemEvent;
 import me.txs.txcrates.inventories.CreateCrateMenu;
 import me.txs.txcrates.util.StringUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -37,6 +47,35 @@ public class ChatListener implements Listener {
 	public static NamespacedKey getRenameKey() {
 		return renameKey;
 	}
+	
+	@EventHandler
+	public void onCrateRedeem(CrateRedeemEvent event) {
+		if(event.getPlayer().getName().equals("Jereds"))
+			event.getPlayer().sendMessage(ChatColor.GREEN + "You opened a: " + event.getCrate().getId());
+	}
+
+	@EventHandler
+	public void onFishing(PlayerFishEvent event) {
+		var player = event.getPlayer();
+		var container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+		var query = container.createQuery();
+		Location loc = BukkitAdapter.adapt(player.getLocation());
+		ApplicableRegionSet set = query.getApplicableRegions(loc);
+		for (ProtectedRegion region : set.getRegions()) {
+			if (region.getId().equals("spawn") || region.getId().equals("warzone")) {
+				event.setCancelled(true);
+				return;
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onKill(EntityDeathEvent event) {
+		var drops = event.getDrops();
+		if(drops == null || drops.isEmpty())
+			return;
+		drops.stream().filter(item -> item.getType() == Material.EMERALD).forEach(item -> item.setAmount(1));
+	}
 
 	@EventHandler
 	public void onChatName(AsyncPlayerChatEvent event) {
@@ -50,12 +89,13 @@ public class ChatListener implements Listener {
 						+ "There's already a crate with this name! Please enter a new name.");
 			}, () -> {
 				player.getPersistentDataContainer().remove(key);
-				
-				if(display.equalsIgnoreCase("cancel")) {
-					player.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "You successfully cancelled this process.");
+
+				if (display.equalsIgnoreCase("cancel")) {
+					player.sendMessage(
+							StringUtil.getPrefix() + ChatColor.GREEN + "You successfully cancelled this process.");
 					return;
 				}
-				
+
 				Bukkit.getScheduler().runTask(TxCrates.getInstance(), () -> new CreateCrateMenu(player, display));
 				player.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "Creating a new crate called " + display);
 			});
@@ -92,9 +132,10 @@ public class ChatListener implements Listener {
 			String oldDisplay = player.getPersistentDataContainer().get(renameKey, PersistentDataType.STRING);
 			ContainerUtil.getByDisplay(oldDisplay).ifPresentOrElse(crate -> {
 				String display = event.getMessage().replaceAll(event.getFormat(), "");
-				
-				if(display.equalsIgnoreCase("cancel")) {
-					player.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "You successfully cancelled this process.");
+
+				if (display.equalsIgnoreCase("cancel")) {
+					player.sendMessage(
+							StringUtil.getPrefix() + ChatColor.GREEN + "You successfully cancelled this process.");
 					return;
 				}
 				crate.setDisplay(display);

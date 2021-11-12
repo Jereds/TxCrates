@@ -12,8 +12,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.jereds.txcontainerapi.api.ContainerUtil;
-import me.jereds.txcontainerapi.api.objects.Container;
+import me.jereds.containerapi.objects.Container;
+import me.jereds.containerapi.objects.ContainerHolder;
+import me.jereds.containerapi.util.ContainerUtil;
+import me.txs.txcrates.commands.CommandClaimKeys;
 import me.txs.txcrates.commands.CrateCommand;
 import me.txs.txcrates.commands.CrateKeyAllCommand;
 import me.txs.txcrates.commands.CratesCommand;
@@ -37,17 +39,24 @@ public class TxCrates extends JavaPlugin {
 		return plugin;
 	}
 	
+	private static ContainerHolder holder;
+	public static ContainerHolder getHolder() {
+		return holder;
+	}
+	
 	@Override
 	public void onEnable() {
 		plugin = this;
 		setupEconomy();
+		holder = new ContainerHolder(this);
 
 		File file = new File(getDataFolder() + "/crates");
 		if (!file.exists())
 			file.mkdir();
 
 		Arrays.stream(new File(getDataFolder() + "/crates").listFiles()).forEach(yml -> {
-			new Container(yml, YamlConfiguration.loadConfiguration(yml).getString("display"));
+			var container = new Container(yml, YamlConfiguration.loadConfiguration(yml).getString("display"));
+			holder.addContainer(container);
 		});
 
 		getCommand("crates").setExecutor(new CratesCommand());
@@ -56,18 +65,14 @@ public class TxCrates extends JavaPlugin {
 		getCommand("cratekey").setExecutor(new KeyCommand());
 		getCommand("testhex").setExecutor(new TestHex());
 		getCommand("cratekeyall").setExecutor(new CrateKeyAllCommand());
+		getCommand("claimkeys").setExecutor(new CommandClaimKeys());
+		CommandClaimKeys.startScheduler();
 		listeners.forEach(listener -> Bukkit.getPluginManager().registerEvents(listener.get(), this));
 	}
 	
 	@Override
 	public void onDisable() {
-		List<Container> containersToRemove = new ArrayList<>();
-		ContainerUtil.getAllContainers().stream()
-			.filter(container -> container != null)
-			.filter(container -> container.getFile().getAbsolutePath().startsWith(getDataFolder().getAbsolutePath()))
-			.forEach(containersToRemove::add);
-		
-		containersToRemove.forEach(ContainerUtil::removeContainer);
+		holder.clearContainers();
 	}
 
 	private static Economy economy;

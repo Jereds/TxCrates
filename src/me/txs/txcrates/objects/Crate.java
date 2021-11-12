@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.persistence.PersistentDataType;
 
-import me.jereds.txcontainerapi.api.objects.Container;
+import me.jereds.containerapi.objects.Container;
 import me.txs.txcrates.util.NamespacedUtil;
 import net.md_5.bungee.api.ChatColor;
 

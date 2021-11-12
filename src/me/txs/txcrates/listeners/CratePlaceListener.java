@@ -4,7 +4,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-import me.jereds.txcontainerapi.api.ContainerUtil;
+import me.jereds.containerapi.util.ContainerUtil;
 import me.txs.txcrates.objects.Crate;
 import me.txs.txcrates.util.CrateUtil;
 import me.txs.txcrates.util.NamespacedUtil;

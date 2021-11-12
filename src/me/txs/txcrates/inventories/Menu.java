@@ -12,8 +12,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import net.kyori.adventure.text.Component;
-
 public abstract class Menu implements InventoryHolder {
 	
 	private final static List<Player> viewers = new ArrayList<>();
@@ -25,7 +23,7 @@ public abstract class Menu implements InventoryHolder {
 	protected final Inventory inv;
 	protected final Player player;
 	public Menu(Player player, String title, int size) {
-		this.inv = Bukkit.createInventory(this, size, Component.text(title));
+		this.inv = Bukkit.createInventory(this, size, title);
 		this.player = player;
 		build();
 		//no longer putting open() here, ExistingCratesMenu would open even if there were no crates, moved open() to after the return so it only opens when there are crates.

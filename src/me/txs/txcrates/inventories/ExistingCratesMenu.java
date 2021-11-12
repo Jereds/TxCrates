@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import me.jereds.txcontainerapi.api.ContainerUtil;
-import me.jereds.txcontainerapi.api.objects.Container;
+import me.jereds.containerapi.objects.Container;
+import me.jereds.containerapi.util.ContainerUtil;
 import me.txs.txcrates.listeners.ChatListener;
 import me.txs.txcrates.util.ItemUtil;
 import net.md_5.bungee.api.ChatColor;
@@ -49,7 +49,7 @@ public class ExistingCratesMenu extends Menu {
 		if(!meta.hasDisplayName())
 			return;
 		
-		Container container = ContainerUtil.getByDisplay(meta.displayName().toString()).get();
+		Container container = ContainerUtil.getByDisplay(meta.getDisplayName()).get();
 		
 		switch(event.getClick()) {
 		case LEFT:
@@ -71,7 +71,6 @@ public class ExistingCratesMenu extends Menu {
 			break;
 		default:
 			break;
-		
 		}
 	}
 

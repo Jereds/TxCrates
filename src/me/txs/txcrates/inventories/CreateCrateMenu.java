@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
-import me.jereds.txcontainerapi.api.objects.Container;
+import me.jereds.containerapi.objects.Container;
 import me.txs.txcrates.TxCrates;
 import net.md_5.bungee.api.ChatColor;
 

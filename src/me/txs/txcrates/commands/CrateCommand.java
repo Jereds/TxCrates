@@ -38,8 +38,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import me.jereds.txcontainerapi.api.ContainerUtil;
-import me.jereds.txcontainerapi.api.objects.Container;
+import me.jereds.containerapi.objects.Container;
+import me.jereds.containerapi.util.ContainerUtil;
 import me.txs.txcrates.util.CrateUtil;
 import me.txs.txcrates.util.InventoryUtil;
 import me.txs.txcrates.util.StringUtil;
@@ -114,8 +114,11 @@ public class CrateCommand implements CommandExecutor, TabCompleter {
 	public List<String> onTabComplete(CommandSender sender, Command arg1, String arg2, String[] args) {
 		if (args.length == 1) {
 			return acceptables.stream().map(mat -> mat.name().toLowerCase())
-					.filter(str -> str.startsWith(args[0]) || str.trim().isEmpty()).collect(Collectors.toList());
+					.filter(str -> str.toLowerCase().startsWith(args[0].toLowerCase()) || str.trim().isEmpty())
+					.collect(Collectors.toList());
 		}
-		return ContainerUtil.getAllContainers().stream().map(Container::getId).collect(Collectors.toList());
+		return ContainerUtil.getAllContainers().stream().map(Container::getId)
+					.filter(str -> str.toLowerCase().startsWith(args[1].toLowerCase()) || str.trim().isEmpty())
+					.collect(Collectors.toList());
 	}
 }

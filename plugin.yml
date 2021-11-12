@@ -26,6 +26,10 @@ commands:
     usage: /testhex <string> <from> <to>
     description: just do it
     aliases: [th]
+  claimkeys:
+    usage: /claimkeys
+    description: claim outstanding crate keys.
+    aliases: [ck, claimkey, keyclaim]
 permissions:
   TxCrates.admin.crates:
     description: Access to /crates

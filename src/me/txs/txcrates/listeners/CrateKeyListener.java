@@ -1,5 +1,7 @@
 package me.txs.txcrates.listeners;
 
+import java.util.Random;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,11 +10,12 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import me.jereds.txcontainerapi.api.objects.Container;
+import me.jereds.containerapi.objects.Container;
 import me.txs.txcrates.events.CrateRedeemEvent;
 import me.txs.txcrates.inventories.CrateInventory;
 import me.txs.txcrates.util.CrateUtil;
 import me.txs.txcrates.util.InventoryUtil;
+import me.txs.txcrates.util.ItemUtil;
 import me.txs.txcrates.util.StringUtil;
 import net.md_5.bungee.api.ChatColor;
 
@@ -81,19 +84,26 @@ public class CrateKeyListener<T> implements Listener {
 
 		ItemStack prize = null;
 		try {
-			prize = container.getRandomItem(false);
+			prize = getRandomItem(container);
 		} catch (Exception e) {
 			player.sendMessage(StringUtil.getPrefix() + ChatColor.RED + "Sorry! This crate seems to have no prizes.");
 			return;
 		}
 		
-		var crateEvent = new CrateRedeemEvent(container, player, prize);
+		event.getItem().setAmount(event.getItem().getAmount() - 1);
+		
+		var crateEvent = new CrateRedeemEvent(container, event.getClickedBlock(), player, prize);
 		Bukkit.getPluginManager().callEvent(crateEvent);
 		if(crateEvent.isCancelled()) {
 			return;
 		}
 
-		event.getItem().setAmount(event.getItem().getAmount() - 1);
 		InventoryUtil.addItem(player, crateEvent.getPrize());
+	}
+	
+	public ItemStack getRandomItem(Container container) {
+		var items = container.getItems(false);
+		items.removeIf(ItemUtil::isFiller);
+		return items.get(new Random().nextInt(items.size()));
 	}
 }

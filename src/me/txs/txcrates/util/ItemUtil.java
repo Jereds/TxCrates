@@ -16,4 +16,8 @@ public class ItemUtil {
 		item.setItemMeta(meta);
 		return item;
 	}
+	
+	public static boolean isFiller(ItemStack item) {
+		return true; //TODO
+	}
 }
