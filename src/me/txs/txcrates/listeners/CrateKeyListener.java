@@ -10,9 +10,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import me.jereds.containerapi.guis.EditContainerGUI;
 import me.jereds.containerapi.objects.Container;
 import me.txs.txcrates.events.CrateRedeemEvent;
-import me.txs.txcrates.inventories.CrateInventory;
 import me.txs.txcrates.util.CrateUtil;
 import me.txs.txcrates.util.InventoryUtil;
 import me.txs.txcrates.util.ItemUtil;
@@ -32,7 +32,7 @@ public class CrateKeyListener<T> implements Listener {
 						
 						if(player.hasPermission("txcrates.admin.bypass")) {
 							player.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "Opening crate editor.");
-							new CrateInventory(player, crate);
+							new EditContainerGUI(player, crate);
 							return;
 						}
 						
@@ -47,7 +47,7 @@ public class CrateKeyListener<T> implements Listener {
 
 				} else if (event.getAction() == Action.LEFT_CLICK_BLOCK && !player.isSneaking()) {
 					CrateUtil.fromBlock(event.getClickedBlock()).ifPresentOrElse(crate -> {
-						new CrateInventory(player, crate);
+						new EditContainerGUI(player, crate);
 					}, () -> {
 						player.sendMessage(
 								StringUtil.getPrefix() + ChatColor.RED + "Sorry! This crate no longer exists.");

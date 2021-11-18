@@ -1,7 +1,6 @@
 package me.txs.txcrates;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
@@ -14,11 +13,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.jereds.containerapi.objects.Container;
 import me.jereds.containerapi.objects.ContainerHolder;
-import me.jereds.containerapi.util.ContainerUtil;
+import me.jereds.containerapi.util.ContainerHolderUtil;
 import me.txs.txcrates.commands.CommandClaimKeys;
 import me.txs.txcrates.commands.CrateCommand;
 import me.txs.txcrates.commands.CrateKeyAllCommand;
-import me.txs.txcrates.commands.CratesCommand;
 import me.txs.txcrates.commands.KeyCommand;
 import me.txs.txcrates.commands.TestHex;
 import me.txs.txcrates.listeners.ChatListener;
@@ -48,18 +46,15 @@ public class TxCrates extends JavaPlugin {
 	public void onEnable() {
 		plugin = this;
 		setupEconomy();
-		holder = new ContainerHolder(this);
+		holder = new ContainerHolder(this, "Crates");
 
-		File file = new File(getDataFolder() + "/crates");
+		File file = new File(getDataFolder() + "/Crates");
 		if (!file.exists())
 			file.mkdir();
 
-		Arrays.stream(new File(getDataFolder() + "/crates").listFiles()).forEach(yml -> {
-			var container = new Container(yml, YamlConfiguration.loadConfiguration(yml).getString("display"));
-			holder.addContainer(container);
-		});
+		Arrays.stream(holder.getFolder().listFiles()).forEach(yml -> 
+			new Container(holder, YamlConfiguration.loadConfiguration(yml).getString("display")));
 
-		getCommand("crates").setExecutor(new CratesCommand());
 		getCommand("crate").setExecutor(new CrateCommand());
 		getCommand("crate").setTabCompleter(new CrateCommand());
 		getCommand("cratekey").setExecutor(new KeyCommand());
@@ -73,6 +68,7 @@ public class TxCrates extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		holder.clearContainers();
+		ContainerHolderUtil.removeContainerHolder(holder);
 	}
 
 	private static Economy economy;

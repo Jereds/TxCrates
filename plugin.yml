@@ -4,12 +4,11 @@ version: 1.0
 authors: [Jereds]
 api-version: 1.16
 soft-depend: [Vault]
-depend: [TxContainerAPI]
+depend: [ContainerAPI]
 commands:
-  crates:
-    usage: /crates
-    description: Opens the base menu for crates.
-    aliases: [txcrates]
+  createcrate:
+    usage: /createcrate <display>
+    aliases: [makecrate, crates, addcrate, cratecreate]
   crate:
     usage: /crate <crate id>
     description: Gives you the specified crate.

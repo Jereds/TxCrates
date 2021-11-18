@@ -1,6 +1,6 @@
 package me.txs.txcrates.inventories;
 
-import java.io.File;
+import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -17,13 +17,12 @@ public class CreateCrateMenu extends Menu {
 
 	public CreateCrateMenu(Player player, String display) {
 		super(player, display, 54);
-		crate = new Container(new File(TxCrates.getInstance().getDataFolder() + "/crates", ChatColor.stripColor(display) + ".yml"), display);
+		crate = new Container(TxCrates.getHolder(), display);
 		this.display = display;
 	}
 
 	@Override
-	public void onClick(InventoryClickEvent event) {
-	}
+	public void onClick(InventoryClickEvent event) {}
 
 	@Override
 	public void onClose(InventoryCloseEvent event) {
@@ -31,7 +30,7 @@ public class CreateCrateMenu extends Menu {
 		event.getPlayer().sendMessage(
 				ChatColor.GREEN + "You successfully created a crate called: " + ChatColor.RESET + crate.getDisplay());
 		
-		System.out.println(ChatColor.AQUA + "New crate was created by: " + ChatColor.WHITE + player.getName()
+		TxCrates.getInstance().getLogger().log(Level.INFO, ChatColor.AQUA + "New crate was created by: " + ChatColor.WHITE + player.getName()
 				+ ChatColor.AQUA + " called: " + display);
 	}
 

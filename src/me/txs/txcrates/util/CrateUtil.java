@@ -14,19 +14,19 @@ import org.bukkit.persistence.PersistentDataType;
 
 import me.jereds.containerapi.objects.Container;
 import me.jereds.containerapi.util.ContainerUtil;
+import me.txs.txcrates.TxCrates;
 import net.md_5.bungee.api.ChatColor;
-
+@SuppressWarnings("deprecation")
 public class CrateUtil {
 
 	public static Optional<Container> fromId(String id) {
-		return ContainerUtil.getAllContainers().stream()
-				.filter(crate -> crate.getDisplay() != null)
-				.filter(crate -> crate.getId().equals(id)).findFirst();
+		return new ContainerUtil(TxCrates.getHolder()).getAllContainers().stream()
+				.filter(crate -> crate.getDisplay() != null && crate.getId().equals(Container.displayToID(id))).findFirst();
 	}
 	
 	public static Optional<Container> fromBlock(Block block) {
 		if (!isCrate(block))
-			return null;
+			return Optional.empty();
 		return fromId(((TileState) block.getState()).getPersistentDataContainer()
 				.get(NamespacedUtil.getCrateBlockTypeKey(), PersistentDataType.STRING));
 	}
@@ -76,7 +76,7 @@ public class CrateUtil {
 	}
 
 	public static Optional<Container> fromKey(ItemStack item) {
-		return ContainerUtil.getById(item.getItemMeta().getPersistentDataContainer()
+		return new ContainerUtil(TxCrates.getHolder()).getById(item.getItemMeta().getPersistentDataContainer()
 				.get(NamespacedUtil.getCrateItemTypeKey(), PersistentDataType.STRING));
 	}
 }

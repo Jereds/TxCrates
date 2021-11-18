@@ -40,6 +40,7 @@ import org.bukkit.entity.Player;
 
 import me.jereds.containerapi.objects.Container;
 import me.jereds.containerapi.util.ContainerUtil;
+import me.txs.txcrates.TxCrates;
 import me.txs.txcrates.util.CrateUtil;
 import me.txs.txcrates.util.InventoryUtil;
 import me.txs.txcrates.util.StringUtil;
@@ -117,7 +118,7 @@ public class CrateCommand implements CommandExecutor, TabCompleter {
 					.filter(str -> str.toLowerCase().startsWith(args[0].toLowerCase()) || str.trim().isEmpty())
 					.collect(Collectors.toList());
 		}
-		return ContainerUtil.getAllContainers().stream().map(Container::getId)
+		return new ContainerUtil(TxCrates.getHolder()).getAllContainers().stream().map(Container::getId)
 					.filter(str -> str.toLowerCase().startsWith(args[1].toLowerCase()) || str.trim().isEmpty())
 					.collect(Collectors.toList());
 	}

@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import me.jereds.containerapi.objects.Container;
 import me.jereds.containerapi.util.ContainerUtil;
+import me.txs.txcrates.TxCrates;
 import me.txs.txcrates.util.CrateUtil;
 import me.txs.txcrates.util.InventoryUtil;
 import me.txs.txcrates.util.StringUtil;
@@ -22,6 +23,7 @@ public class KeyCommand implements CommandExecutor, TabCompleter {
 
 	private int amount = 1;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (!sender.hasPermission("TxCrates.admin.key")) {
@@ -80,7 +82,7 @@ public class KeyCommand implements CommandExecutor, TabCompleter {
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] args) {
 		if(args.length == 2)
-			return ContainerUtil.getAllContainers().stream().map(Container::getId)
+			return new ContainerUtil(TxCrates.getHolder()).getAllContainers().stream().map(Container::getId)
 					.filter(str -> str.toLowerCase().startsWith(args[1].toLowerCase()) || str.trim().isEmpty())
 					.collect(Collectors.toList());
 		return null;

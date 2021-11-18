@@ -30,8 +30,8 @@ public class CommandClaimKeys implements CommandExecutor {
 		
 		var player = (Player)sender;
 		var keys = 0;
-		for(Container container : ContainerUtil.getAllContainers()) {
-			var tag = new NamespacedKey(TxCrates.getInstance(), container.getId().replace(' ', '_') + "-claimable");
+		for(Container container : new ContainerUtil(TxCrates.getHolder()).getAllContainers()) {
+			var tag = new NamespacedKey(TxCrates.getInstance(), container.getId().replace(' ', '_') + "-claimable"); //needs to be declared here because it has container id in the name
 			var cont = player.getPersistentDataContainer();
 			if(cont.has(tag, PersistentDataType.INTEGER)) {
 				var key = CrateUtil.getCrateKey(container);
@@ -53,8 +53,8 @@ public class CommandClaimKeys implements CommandExecutor {
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(TxCrates.getInstance(), () -> {
 			List<Player> players = new ArrayList<>();
 			playerloop: for(Player player : Bukkit.getOnlinePlayers()) {
-				for(Container container : ContainerUtil.getAllContainers()) {
-					var tag = new NamespacedKey(TxCrates.getInstance(), container.getId().replace(' ', '_') + "-claimable");
+				for(Container container : new ContainerUtil(TxCrates.getHolder()).getAllContainers()) {
+					var tag = new NamespacedKey(TxCrates.getInstance(), container.getId().replace(' ', '_') + "-claimable"); //needs to be declared here because it has container id in the name
 					if(player.getPersistentDataContainer().has(tag, PersistentDataType.INTEGER)) {
 						players.add(player);
 						continue playerloop;

@@ -19,11 +19,10 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 import me.jereds.containerapi.util.ContainerUtil;
 import me.txs.txcrates.TxCrates;
-import me.txs.txcrates.events.CrateRedeemEvent;
 import me.txs.txcrates.inventories.CreateCrateMenu;
 import me.txs.txcrates.util.StringUtil;
 import net.md_5.bungee.api.ChatColor;
-
+@SuppressWarnings("deprecation")
 public class ChatListener implements Listener {
 
 	private static final NamespacedKey key;
@@ -46,12 +45,6 @@ public class ChatListener implements Listener {
 
 	public static NamespacedKey getRenameKey() {
 		return renameKey;
-	}
-	
-	@EventHandler
-	public void onCrateRedeem(CrateRedeemEvent event) {
-		if(event.getPlayer().getName().equals("Jereds"))
-			event.getPlayer().sendMessage(ChatColor.GREEN + "You opened a: " + event.getCrate().getId());
 	}
 
 	@EventHandler
@@ -84,7 +77,7 @@ public class ChatListener implements Listener {
 			event.setCancelled(true);
 			String display = ChatColor.translateAlternateColorCodes('&',
 					event.getMessage().replaceAll(event.getFormat(), ""));
-			ContainerUtil.getByDisplay(display).ifPresentOrElse(crate -> {
+			new ContainerUtil(TxCrates.getHolder()).getByDisplay(display).ifPresentOrElse(crate -> {
 				player.sendMessage(StringUtil.getPrefix() + ChatColor.RED
 						+ "There's already a crate with this name! Please enter a new name.");
 			}, () -> {
@@ -108,9 +101,9 @@ public class ChatListener implements Listener {
 		if (player.getPersistentDataContainer().has(delKey, PersistentDataType.STRING)) {
 			event.setCancelled(true);
 			String display = player.getPersistentDataContainer().get(delKey, PersistentDataType.STRING);
-			ContainerUtil.getByDisplay(display).ifPresentOrElse(crate -> {
+			new ContainerUtil(TxCrates.getHolder()).getByDisplay(display).ifPresentOrElse(crate -> {
 				if (ChatColor.stripColor(display).equals(event.getMessage().replaceAll(event.getFormat(), ""))) {
-					ContainerUtil.removeContainer(crate);
+					new ContainerUtil(TxCrates.getHolder()).removeContainer(crate);
 					crate.getFile().delete();
 					player.sendMessage(
 							StringUtil.getPrefix() + ChatColor.GREEN + "You successfully deleted this crate.");
@@ -130,7 +123,7 @@ public class ChatListener implements Listener {
 		if (player.getPersistentDataContainer().has(renameKey, PersistentDataType.STRING)) {
 			event.setCancelled(true);
 			String oldDisplay = player.getPersistentDataContainer().get(renameKey, PersistentDataType.STRING);
-			ContainerUtil.getByDisplay(oldDisplay).ifPresentOrElse(crate -> {
+			new ContainerUtil(TxCrates.getHolder()).getByDisplay(oldDisplay).ifPresentOrElse(crate -> {
 				String display = event.getMessage().replaceAll(event.getFormat(), "");
 
 				if (display.equalsIgnoreCase("cancel")) {

@@ -23,6 +23,7 @@ public class InventoryUtil {
 	
 	public static void addCrateKey(Player player, Container crate, int amount) {
 		var key = CrateUtil.getCrateKey(crate);
+		key.setAmount(amount);
 		if(!invIsFull(player.getInventory())) {
 			addItem(player, key);
 			return;
@@ -34,7 +35,7 @@ public class InventoryUtil {
 			var tag = new NamespacedKey(TxCrates.getInstance(), crate.getId().replace(' ', '_') + "-claimable");
 			var amt = player.getPersistentDataContainer().getOrDefault(tag, PersistentDataType.INTEGER, 0);
 			amt += amount;
-			player.getPersistentDataContainer().set(tag, PersistentDataType.INTEGER, amt+1);
+			player.getPersistentDataContainer().set(tag, PersistentDataType.INTEGER, amt);
 			return;
 		}
 		

@@ -22,6 +22,7 @@ public abstract class Menu implements InventoryHolder {
 
 	protected final Inventory inv;
 	protected final Player player;
+	@SuppressWarnings("deprecation")
 	public Menu(Player player, String title, int size) {
 		this.inv = Bukkit.createInventory(this, size, title);
 		this.player = player;

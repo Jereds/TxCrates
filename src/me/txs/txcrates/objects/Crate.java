@@ -6,7 +6,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 import me.jereds.containerapi.objects.Container;
 import me.txs.txcrates.util.NamespacedUtil;
-import net.md_5.bungee.api.ChatColor;
 
 public class Crate {
 
@@ -18,13 +17,9 @@ public class Crate {
 		this.block = block;
 	}
 
-	public String getId() {
-		return ChatColor.stripColor(crate.getDisplay());
-	}
-
 	public void create() {
 		var state = (org.bukkit.block.Container) block.getState();
-		state.getPersistentDataContainer().set(NamespacedUtil.getCrateBlockTypeKey(), PersistentDataType.STRING, getId());
+		state.getPersistentDataContainer().set(NamespacedUtil.getCrateBlockTypeKey(), PersistentDataType.STRING, crate.getId());
 		state.update();
 	}
 
