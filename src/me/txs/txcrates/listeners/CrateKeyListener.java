@@ -19,7 +19,7 @@ import me.txs.txcrates.util.ItemUtil;
 import me.txs.txcrates.util.StringUtil;
 import net.md_5.bungee.api.ChatColor;
 
-public class CrateKeyListener<T> implements Listener {
+public class CrateKeyListener implements Listener {
 
 	@EventHandler
 	public void onClickCrate(PlayerInteractEvent event) {
@@ -68,9 +68,15 @@ public class CrateKeyListener<T> implements Listener {
 			return;
 		}
 
-		Container container = CrateUtil.fromBlock(event.getClickedBlock()).get();
+		Container container = CrateUtil.fromBlock(event.getClickedBlock()).orElseThrow(() -> {
+			player.sendMessage(StringUtil.getPrefix() + ChatColor.RED + "Something went wrong! Please report this to an admin!");
+			throw new IllegalArgumentException("Invalid container!");
+		});
 
-		if (!container.getId().equals(CrateUtil.fromKey(event.getItem()).get().getId())) {
+		if (!container.getId().equals(CrateUtil.fromKey(event.getItem()).orElseThrow(() -> {
+			player.sendMessage(StringUtil.getPrefix() + ChatColor.RED + "Something went wrong! Please report this to an admin! {cratekey invalid}");
+			throw new IllegalArgumentException("Invalid crate key!");
+		}).getId())) {
 			player.sendMessage(StringUtil.getPrefix() + ChatColor.RED + "This is the wrong crate! Your key is for a "
 					+ CrateUtil.fromKey(event.getItem()).get().getDisplay());
 			return;
@@ -94,11 +100,6 @@ public class CrateKeyListener<T> implements Listener {
 		
 		var crateEvent = new CrateRedeemEvent(container, event.getClickedBlock(), player, prize);
 		Bukkit.getPluginManager().callEvent(crateEvent);
-		if(crateEvent.isCancelled()) {
-			return;
-		}
-
-		InventoryUtil.addItem(player, crateEvent.getPrize());
 	}
 	
 	public ItemStack getRandomItem(Container container) {

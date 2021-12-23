@@ -33,8 +33,7 @@ public class KeyCommand implements CommandExecutor, TabCompleter {
 		}
 
 		if (args.length < 2) {
-			sender.sendMessage(StringUtil.getPrefix() + ChatColor.RED
-					+ "Incorrect format, please try /cratekey <player> <crate id> <amount>");
+			sender.sendMessage(StringUtil.getPrefix() + ChatColor.RED + "Incorrect format, please try /cratekey <player> <crate id> <amount>");
 			return true;
 		}
 

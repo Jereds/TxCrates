@@ -1,25 +1,22 @@
 package me.txs.txcrates;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.jereds.containerapi.objects.Container;
 import me.jereds.containerapi.objects.ContainerHolder;
 import me.jereds.containerapi.util.ContainerHolderUtil;
 import me.txs.txcrates.commands.CommandClaimKeys;
+import me.txs.txcrates.commands.CommandMakeFiller;
 import me.txs.txcrates.commands.CrateCommand;
 import me.txs.txcrates.commands.CrateKeyAllCommand;
 import me.txs.txcrates.commands.KeyCommand;
 import me.txs.txcrates.commands.TestHex;
-import me.txs.txcrates.listeners.ChatListener;
 import me.txs.txcrates.listeners.CrateBreakListener;
 import me.txs.txcrates.listeners.CrateKeyListener;
 import me.txs.txcrates.listeners.CratePlaceListener;
@@ -29,7 +26,7 @@ import net.milkbowl.vault.economy.Economy;
 public class TxCrates extends JavaPlugin {
 
 	private final List<Supplier<Listener>> listeners = Arrays.asList(CrateBreakListener::new, CrateKeyListener::new,
-			CratePlaceListener::new, InventoryListener::new, ChatListener::new);
+			CratePlaceListener::new, InventoryListener::new);
 
 	private static TxCrates plugin;
 
@@ -46,15 +43,21 @@ public class TxCrates extends JavaPlugin {
 	public void onEnable() {
 		plugin = this;
 		setupEconomy();
-		holder = new ContainerHolder(this, "Crates");
+		
+		ContainerHolder holder = new ContainerHolder(this, "Crates");
+		holder.generateContainers();
 
-		File file = new File(getDataFolder() + "/Crates");
-		if (!file.exists())
-			file.mkdir();
+//		File file = new File(getDataFolder() + "/Crates");
+//		if (!file.exists())
+//			file.mkdir();
+//
+//		Arrays.stream(holder.getFolder().listFiles()).forEach(yml -> {
+//			var display = YamlConfiguration.loadConfiguration(yml).getString("display");
+//			if(display != null)
+//				new Container(holder, display);
+//		});
 
-		Arrays.stream(holder.getFolder().listFiles()).forEach(yml -> 
-			new Container(holder, YamlConfiguration.loadConfiguration(yml).getString("display")));
-
+		getCommand("makefiller").setExecutor(new CommandMakeFiller());
 		getCommand("crate").setExecutor(new CrateCommand());
 		getCommand("crate").setTabCompleter(new CrateCommand());
 		getCommand("cratekey").setExecutor(new KeyCommand());
@@ -62,6 +65,7 @@ public class TxCrates extends JavaPlugin {
 		getCommand("cratekeyall").setExecutor(new CrateKeyAllCommand());
 		getCommand("claimkeys").setExecutor(new CommandClaimKeys());
 		CommandClaimKeys.startScheduler();
+		
 		listeners.forEach(listener -> Bukkit.getPluginManager().registerEvents(listener.get(), this));
 	}
 	

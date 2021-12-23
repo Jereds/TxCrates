@@ -10,7 +10,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import me.jereds.containerapi.objects.Container;
 import me.jereds.containerapi.util.ContainerUtil;
@@ -51,9 +50,13 @@ public class CrateKeyAllCommand implements CommandExecutor, TabCompleter {
 			amount = 1;
 		}
 
-		if (amount > 500) {
-			sender.sendMessage(StringUtil.getPrefix() + ChatColor.RED + "Wtf do you think you're doing?");
+		if (amount > 30) {
+			sender.sendMessage(StringUtil.getPrefix() + ChatColor.RED + "Wtf are you doing??");
 			return true;
+		}
+		
+		if(amount > 100 && sender instanceof Player) {
+			((Player)sender).banPlayer("This is an automatic fail-safe ban. You should never be giving out that many crate keys...");
 		}
 
 		if (amount < 1) {
@@ -63,10 +66,8 @@ public class CrateKeyAllCommand implements CommandExecutor, TabCompleter {
 		}
 
 		CrateUtil.fromId(id).ifPresentOrElse(crate -> {
-			ItemStack item = CrateUtil.getCrateKey(crate);
-			item.setAmount(amount);
 			for(Player player : Bukkit.getOnlinePlayers()) {
-				InventoryUtil.addItem(player, item);
+				InventoryUtil.addCrateKey(player, crate, amount);
 				sender.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "Successfully gave " + player.getDisplayName()
 						+ ChatColor.GREEN + " " + amount + " key" + (amount > 1 ? "s" : "") + ".");
 				player.sendMessage(StringUtil.getPrefix() + ChatColor.GREEN + "Successfully recieved" + 

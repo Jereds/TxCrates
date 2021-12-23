@@ -29,6 +29,8 @@ commands:
     usage: /claimkeys
     description: claim outstanding crate keys.
     aliases: [ck, claimkey, keyclaim]
+  makefiller:
+    description: Filler item.
 permissions:
   TxCrates.admin.crates:
     description: Access to /crates
